@@ -1,37 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="10dp"
     android:layout_marginTop="10dp"
     android:background="@color/purple_200"
-    android:orientation="vertical"
-    android:padding="15dp">
+    android:orientation="horizontal"
+    android:padding="15dp"
+    android:baselineAligned="false">
 
-    <TextView
-        android:id="@+id/userId"
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/userId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            tools:text="ID" />
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="5dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            tools:text="suresh" />
+
+        <TextView
+            android:id="@+id/userEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            tools:text="suresh@gmail.com" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        tools:text="ID : 1" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/userName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingVertical="5dp"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        tools:text="Name : suresh" />
+        <Button
+            android:id="@+id/btnUpdate"
+            android:textSize="10sp"
+            android:textAllCaps="false"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:text="@string/update" />
 
-    <TextView
-        android:id="@+id/userEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        tools:text="Email : suresh@gmail.com" />
+        <Button
+            android:id="@+id/btnDelete"
+            android:textSize="10sp"
+            android:textAllCaps="false"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:text="@string/delete" />
+    </LinearLayout>
 
 </LinearLayout>

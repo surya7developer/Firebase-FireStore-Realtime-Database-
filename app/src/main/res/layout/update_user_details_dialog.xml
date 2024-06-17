@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_margin="20dp"
-    android:orientation="vertical">
+    android:paddingBottom="30dp"
+    android:layout_height="wrap_content">
 
     <EditText
         android:id="@+id/edtName"
@@ -15,10 +14,8 @@
         android:singleLine="true"
         android:inputType="textPersonName"
         android:layout_marginHorizontal="50dp"
-        android:hint="@string/please_enter_name"
         android:paddingVertical="10dp"
-        android:textColor="@color/black"
-        android:importantForAutofill="no" />
+        android:textColor="@color/black" />
 
     <EditText
         android:id="@+id/edtEmail"
@@ -27,10 +24,8 @@
         android:layout_marginHorizontal="50dp"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:hint="@string/please_enter_email"
         android:paddingVertical="10dp"
-        android:textColor="@color/black"
-        android:importantForAutofill="no" />
+        android:textColor="@color/black" />
 
     <RelativeLayout
         android:layout_marginTop="30dp"
@@ -44,11 +39,11 @@
             android:textColor="@color/white"
             android:gravity="center"
             android:visibility="visible"
-            android:id="@+id/btnAddToFirebase"
+            android:id="@+id/btnUpdate"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:text="@string/add_to_firebase" />
+            android:text="@string/update" />
 
         <ProgressBar
             android:visibility="gone"
@@ -58,13 +53,5 @@
             android:layout_height="30dp"/>
 
     </RelativeLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvUsersList"
-        android:layout_marginTop="30dp"
-        tools:listitem="@layout/user_item"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
 </LinearLayout>
