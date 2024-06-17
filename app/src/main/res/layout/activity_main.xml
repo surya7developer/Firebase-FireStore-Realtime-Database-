@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    android:orientation="vertical">
+
+
+    <EditText
+        android:layout_marginTop="50dp"
+        android:id="@+id/edtName"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:singleLine="true"
+        android:layout_marginHorizontal="50dp"
+        android:hint="Please enter name"
+        android:paddingVertical="10dp"
+        android:textColor="@color/black" />
+
+    <EditText
+        android:id="@+id/edtEmail"
+        android:singleLine="true"
+        android:layout_marginHorizontal="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="Please enter email"
+        android:paddingVertical="10dp"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/btnAddToFirebase"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:text="Add to firebase" />
+
+    <ProgressBar
+        android:id="@+id/loader"
+        android:visibility="gone"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

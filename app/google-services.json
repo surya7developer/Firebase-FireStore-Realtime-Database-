@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "266441400570",
+    "project_id": "newfirebasetasks",
+    "storage_bucket": "newfirebasetasks.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:266441400570:android:a6ea81e20cb76641e8e943",
+        "android_client_info": {
+          "package_name": "com.firebase.pushnotification"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5jQjoFhHKjrHqA3b8KORTEQenYwiXP90"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
