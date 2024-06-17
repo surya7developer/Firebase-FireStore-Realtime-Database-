@@ -8,6 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.firebase.pushnotification.R
+import com.firebase.pushnotification.adapter.UsersListAdapter
 import com.firebase.pushnotification.databinding.ActivityMainBinding
 import com.firebase.pushnotification.extension.gone
 import com.firebase.pushnotification.extension.showToastMessage
@@ -19,21 +20,34 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity(), OnClickListener {
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel: MainViewModel by viewModels()
+    private lateinit var userListAdapter: UsersListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
+        setAdapter()
         setClickListener()
-        observer()
+        createUserObserver()
+        getAllUsersDataObserver()
+        fetchAllData()
+    }
+
+    private fun fetchAllData() {
+        mainViewModel.fetchAllUsersData()
+    }
+
+    private fun setAdapter() {
+        userListAdapter = UsersListAdapter(arrayListOf())
+        binding.rvUsersList.adapter = userListAdapter
     }
 
     private fun setClickListener() {
         binding.btnAddToFirebase.setOnClickListener(this)
     }
 
-    private fun observer() {
+    private fun createUserObserver() {
         lifecycleScope.launch {
             mainViewModel.getUiState().collect { result ->
                 when (result) {
@@ -47,7 +61,29 @@ class MainActivity : ComponentActivity(), OnClickListener {
                     }
 
                     is MainViewModel.CreateUserDataState.Error -> {
-                        showToastMessage("Failed, Please try again")
+                        showToastMessage(result.message)
+                    }
+
+                    is MainViewModel.CreateUserDataState.ValidationMessage -> {
+                        showToastMessage(getString(R.string.please_enter_valid_details))
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    private fun getAllUsersDataObserver() {
+        lifecycleScope.launch {
+            mainViewModel.getAllUsersData().collect { result ->
+                when (result) {
+                    is MainViewModel.CreateUserDataState.Success -> {
+                        userListAdapter.setData(result.data)
+                    }
+
+                    is MainViewModel.CreateUserDataState.Error -> {
+                        showToastMessage(result.message)
                     }
 
                     else -> {}
@@ -57,8 +93,14 @@ class MainActivity : ComponentActivity(), OnClickListener {
     }
 
     private fun hideShowLoader(showLoader: Boolean) {
-        binding.loader.apply {
-            if (showLoader) visible() else gone()
+        binding.apply {
+            if (showLoader) {
+                btnAddToFirebase.text = ""
+                loader.visible()
+            } else {
+                btnAddToFirebase.text = getString(R.string.add_to_firebase)
+                loader.gone()
+            }
         }
     }
 
@@ -74,8 +116,7 @@ class MainActivity : ComponentActivity(), OnClickListener {
         binding.apply {
             mainViewModel.createUserData(
                 UserDetails(
-                    edtName.text.toString(),
-                    edtEmail.text.toString()
+                    edtName.text.toString(), edtEmail.text.toString()
                 )
             )
 

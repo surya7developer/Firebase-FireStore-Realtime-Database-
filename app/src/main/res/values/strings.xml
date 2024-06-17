@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FirebasePushNotification</string>
+    <string name="add_to_firebase">Add to firebase</string>
+    <string name="please_enter_valid_details">Please enter valid details</string>
 </resources>
