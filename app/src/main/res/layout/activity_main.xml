@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:singleLine="true"
+        android:inputType="textPersonName"
         android:layout_marginHorizontal="50dp"
         android:hint="Please enter name"
         android:paddingVertical="10dp"
@@ -20,6 +21,7 @@
     <EditText
         android:id="@+id/edtEmail"
         android:singleLine="true"
+        android:inputType="textEmailAddress"
         android:layout_marginHorizontal="50dp"
         android:layout_width="match_parent"
         android:layout_height="60dp"
