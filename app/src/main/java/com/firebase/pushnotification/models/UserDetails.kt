@@ -4,4 +4,5 @@ data class UserDetails(
     val name: String = "",
     val email: String = "",
     var uid: String = "",
+    var profileImagePath: String = "",
 )

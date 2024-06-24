@@ -7,6 +7,27 @@
     android:layout_margin="20dp"
     android:orientation="vertical">
 
+    <TextView
+        android:text="Firebase"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:textColor="@color/purple_200"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/profileImage"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:scaleType="fitXY"
+        app:shapeAppearanceOverlay="@style/roundedImageView"
+        android:src="@drawable/user"
+        android:layout_marginTop="20dp"/>
+
     <EditText
         android:id="@+id/edtName"
         android:layout_marginTop="30dp"

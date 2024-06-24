@@ -1,11 +1,17 @@
 package com.firebase.pushnotification.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.firebase.pushnotification.R
 import com.firebase.pushnotification.adapter.UsersListAdapter
@@ -17,10 +23,14 @@ import com.firebase.pushnotification.extension.showToastMessage
 import com.firebase.pushnotification.extension.visible
 import com.firebase.pushnotification.listener.HandleButtonAction
 import com.firebase.pushnotification.models.UserDetails
+import com.firebase.pushnotification.util.permissionList
+import com.firebase.pushnotification.util.requestPermissionResult
 import com.firebase.pushnotification.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity(), OnClickListener, HandleButtonAction {
+    private lateinit var resultCallBackLauncher: ActivityResultLauncher<Intent>
+    private lateinit var requestMultiplePermissions: ActivityResultLauncher<Array<String>>
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel: MainViewModel by viewModels()
     private lateinit var userListAdapter: UsersListAdapter
@@ -31,11 +41,39 @@ class MainActivity : ComponentActivity(), OnClickListener, HandleButtonAction {
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
         initialization()
+        callBackResult()
         setAdapter()
         setClickListener()
         createUserObserver()
         getAllUsersDataObserver()
         fetchAllData()
+    }
+
+    private fun callBackResult() {
+        requestMultiplePermissions = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            permissions.entries.forEach {
+                Log.d("resultLauncher", "${it.key} = ${it.value}")
+                if (it.value) {
+                    openGallery()
+                }
+            }
+        }
+
+        resultCallBackLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    val data: Intent? = result.data
+                    val uri = data?.data
+                    if (uri != null) {
+                        mainViewModel.profileImagePath = uri
+                        binding.profileImage.setImageURI(uri)
+                    } else {
+                        Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
     }
 
     private fun initialization() {
@@ -47,12 +85,13 @@ class MainActivity : ComponentActivity(), OnClickListener, HandleButtonAction {
     }
 
     private fun setAdapter() {
-        userListAdapter = UsersListAdapter(arrayListOf(), listener)
+        userListAdapter = UsersListAdapter(arrayListOf(), listener, this)
         binding.rvUsersList.adapter = userListAdapter
     }
 
     private fun setClickListener() {
         binding.btnAddToFirebase.setOnClickListener(this)
+        binding.profileImage.setOnClickListener(this)
     }
 
     private fun createUserObserver() {
@@ -62,6 +101,7 @@ class MainActivity : ComponentActivity(), OnClickListener, HandleButtonAction {
                     is MainViewModel.CreateUserDataState.Success -> {
                         hideShowLoader(false)
                         showToastMessage("User data sent successfully")
+                        resetData()
                     }
 
                     is MainViewModel.CreateUserDataState.Loading -> {
@@ -79,6 +119,15 @@ class MainActivity : ComponentActivity(), OnClickListener, HandleButtonAction {
                     else -> {}
                 }
             }
+        }
+    }
+
+    private fun resetData() {
+        mainViewModel.profileImagePath = "".toUri()
+        binding.apply {
+            edtName.setText("")
+            edtEmail.setText("")
+            profileImage.setImageResource(R.drawable.user)
         }
     }
 
@@ -117,6 +166,16 @@ class MainActivity : ComponentActivity(), OnClickListener, HandleButtonAction {
             R.id.btnAddToFirebase -> {
                 addUserData()
             }
+
+            R.id.profileImage -> {
+                requestPermissionResult { isGranted ->
+                    if (isGranted) {
+                        openGallery()
+                    } else {
+                        requestMultiplePermissions.launch(permissionList)
+                    }
+                }
+            }
         }
     }
 
@@ -124,12 +183,11 @@ class MainActivity : ComponentActivity(), OnClickListener, HandleButtonAction {
         binding.apply {
             mainViewModel.createUserData(
                 UserDetails(
-                    edtName.text.toString(), edtEmail.text.toString()
+                    edtName.text.toString(),
+                    edtEmail.text.toString(),
+                    profileImagePath = mainViewModel.profileImagePath.toString()
                 )
             )
-
-            edtName.setText("")
-            edtEmail.setText("")
         }
     }
 
@@ -140,10 +198,17 @@ class MainActivity : ComponentActivity(), OnClickListener, HandleButtonAction {
         }
     }
 
-    override fun onClickDelete(uid: String) {
+    override fun onClickDelete(userDetails: UserDetails) {
         showDeleteDialog {
-            mainViewModel.deleteUser(uid)
+            mainViewModel.deleteUser(userDetails)
             showToastMessage("Delete successfully")
         }
+    }
+
+    private fun openGallery() {
+        val intent = Intent()
+        intent.setType("image/*")
+        intent.setAction(Intent.ACTION_GET_CONTENT)
+        resultCallBackLauncher.launch(intent)
     }
 }
