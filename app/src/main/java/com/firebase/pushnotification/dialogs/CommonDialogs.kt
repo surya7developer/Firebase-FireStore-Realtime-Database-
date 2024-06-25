@@ -7,7 +7,7 @@ import com.firebase.pushnotification.R
 import com.firebase.pushnotification.databinding.UpdateUserDetailsDialogBinding
 import com.firebase.pushnotification.extension.showToastMessage
 import com.firebase.pushnotification.models.UserDetails
-import com.firebase.pushnotification.validation.isValidData
+import com.firebase.pushnotification.validation.isValidUpdatedData
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
@@ -24,7 +24,7 @@ fun Context.showBottomSheetDialog(userDetails: UserDetails, action: (UserDetails
                 name = edtName.text.toString(),
                 email = edtEmail.text.toString(),
             )
-            if (updatedData.isValidData()){
+            if (updatedData.isValidUpdatedData()){
                 action.invoke(updatedData)
                 bottomSheetDialog.dismiss()
             } else {
